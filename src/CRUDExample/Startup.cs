@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CRUDExample.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,6 +24,13 @@ namespace CRUDExample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //註冊 DB Context，指定使用 SQL 資料庫
+            services.AddDbContextPool<JournalDbContext>(options =>
+            {
+                //TODO: 實際應用時，連線字串不該寫死在程式碼裡，應應移入設定檔並加密儲存
+                options.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=X:\Temp\Journal.mdf;Integrated Security=True;Connect Timeout=30");
+            });
+
             services.AddRazorPages();
         }
 
