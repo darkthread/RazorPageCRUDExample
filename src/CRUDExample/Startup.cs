@@ -35,10 +35,22 @@ namespace CRUDExample
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+                        //透過建構式參數取得 DBContext (依賴注入架構的標準做法)
+                        JournalDbContext dbContext)
         {
+            //檢查資料表是否已經存在，若不存在自動建立；
+            //若資料表存在但版本太舊符則自動更新。
+            //在正式環境自動更新資料庫有點可怕，我加了限定LocalDB執行的安全鎖
+            if (dbContext.Database.GetDbConnection().ConnectionString.Contains("MSSQLLocalDB"))
+            {
+                dbContext.Database.Migrate();
+            }
+
+
             if (env.IsDevelopment())
             {
+
                 app.UseDeveloperExceptionPage();
             }
             else
