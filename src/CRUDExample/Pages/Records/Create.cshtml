@@ -15,13 +15,17 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="DailyRecord.Date" class="control-label"></label>
-                <input asp-for="DailyRecord.Date" class="form-control" />
+                <input type="date" asp-for="DailyRecord.Date" class="form-control" />
                 <span asp-validation-for="DailyRecord.Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DailyRecord.StatusText" class="control-label"></label>
-                <input asp-for="DailyRecord.StatusText" class="form-control" />
-                <span asp-validation-for="DailyRecord.StatusText" class="text-danger"></span>
+                <label asp-for="DailyRecord.Status" class="control-label"></label>
+                <select asp-for="DailyRecord.Status" 
+                        asp-items="Html.GetEnumSelectList<CRUDExample.Models.StatusFlags>()"
+                        class="form-control">
+                    <option selected value="">請選擇...</option>
+                </select>
+                <span asp-validation-for="DailyRecord.Status" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DailyRecord.EventSummary" class="control-label"></label>

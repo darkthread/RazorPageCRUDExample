@@ -20,9 +20,18 @@ namespace CRUDExample
 
         public IList<DailyRecord> DailyRecord { get;set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? year = null, int? month = null)
         {
-            DailyRecord = await _context.Records.ToListAsync();
+            year = year ?? DateTime.Today.Year;
+            //順便介紹C# 8.0 Compound Assignment寫法，跟上面效果相同但更簡潔
+            month ??= DateTime.Today.Month;
+            var startDate = new DateTime(year.Value, month.Value, 1);
+
+            DailyRecord = await _context.Records
+                .Where(o => o.Date >= startDate &&
+                            o.Date < startDate.AddMonths(1))
+                .OrderBy(o => o.Date)
+                .ToListAsync();
         }
     }
 }

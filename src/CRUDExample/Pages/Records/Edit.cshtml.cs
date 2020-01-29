@@ -48,6 +48,13 @@ namespace CRUDExample
             }
 
             _context.Attach(DailyRecord).State = EntityState.Modified;
+            
+            //檢查日期是否被更動，若是，拒絕更新
+            if ( _context.Entry(DailyRecord).Property(o => o.Date).IsModified)
+            {
+                ModelState.AddModelError("DailyRecord.Date", "日期不可修改");
+                return Page();
+            }
 
             try
             {

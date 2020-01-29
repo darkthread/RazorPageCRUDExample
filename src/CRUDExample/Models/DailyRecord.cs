@@ -17,6 +17,7 @@ namespace CRUDExample.Models
         /// <summary>
         /// 日期
         /// </summary>
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime Date { get; set; } = DateTime.Today;
         /// <summary>
         /// 狀態旗標

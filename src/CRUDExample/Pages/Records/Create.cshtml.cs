@@ -35,6 +35,13 @@ namespace CRUDExample
                 return Page();
             }
 
+            //檢查同日期是否已有資料，若是顯示日期重複
+            if (_context.Records.Any(o => o.Date == DailyRecord.Date))
+            {
+                ModelState.AddModelError("DailyRecord.Date", "該日期記錄已存在");
+                return Page();
+            }
+
             _context.Records.Add(DailyRecord);
             await _context.SaveChangesAsync();
 
