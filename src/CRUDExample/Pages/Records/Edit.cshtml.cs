@@ -47,30 +47,24 @@ namespace CRUDExample
                 return Page();
             }
 
-            _context.Attach(DailyRecord).State = EntityState.Modified;
-            
+            //由資料庫取得修改前版本
+            var orig = _context.Records.SingleOrDefault(o => o.Id == DailyRecord.Id);
+            if (orig == null) return NotFound();
+
             //檢查日期是否被更動，若是，拒絕更新
-            if ( _context.Entry(DailyRecord).Property(o => o.Date).IsModified)
+            if (orig.Date.CompareTo(DailyRecord.Date) != 0)
             {
                 ModelState.AddModelError("DailyRecord.Date", "日期不可修改");
                 return Page();
             }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DailyRecordExists(DailyRecord.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            //以正向表列方式更新可更新欄位，SaveChanges()只會更新有異動的欄位
+            orig.Status = DailyRecord.Status;
+            orig.Remark = DailyRecord.Remark;
+            orig.EventSummary = DailyRecord.EventSummary;
+            orig.User = DailyRecord.User;
+
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
