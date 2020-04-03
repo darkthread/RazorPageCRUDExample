@@ -28,7 +28,7 @@ namespace CRUDExample
             services.AddDbContextPool<JournalDbContext>(options =>
             {
                 //TODO: 實際應用時，連線字串不該寫死在程式碼裡，應應移入設定檔並加密儲存
-                options.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=X:\Temp\Journal.mdf;Integrated Security=True;Connect Timeout=30");
+                options.UseSqlServer(Configuration.GetConnectionString("LocalDB"));
             });
 
             services.AddRazorPages();
